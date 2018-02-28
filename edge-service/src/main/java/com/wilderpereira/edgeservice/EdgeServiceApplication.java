@@ -55,6 +55,10 @@ public class EdgeServiceApplication {
 
                 )
 
+                //websocket
+                .route("websocket_route", r -> r.path("/echo")
+                        .uri("ws://localhost:9000"))
+
 
                 .build();
 	}

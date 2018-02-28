@@ -11,3 +11,18 @@ It contains 3 applications:
 ## Build & Run
 Run all the services locally and start the database instance running the following command:
 `docker run -d -p 27017:27017 -v ~/data:/data/db mongo`
+
+
+## Websocket Sample
+
+[install wscat](https://www.npmjs.com/package/wscat)
+
+In one terminal, run websocket server:
+```
+wscat --listen 9000
+``` 
+
+In another, run a client, connecting through gateway:
+```
+wscat --connect ws://localhost:8080/echo
+```
