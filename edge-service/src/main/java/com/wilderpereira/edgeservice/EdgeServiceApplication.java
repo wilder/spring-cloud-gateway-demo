@@ -28,13 +28,35 @@ public class EdgeServiceApplication {
 				)
 
 				//load-balanced proxy
-				.route("lb_cutomer-service", r -> r.path("/lb")
+				.route("lb_cutomer_service", r -> r.path("/lb")
                         //used for hitting customer-service/customers instead of customer-service/fb
                         .filters(f -> f.rewritePath("/lb",
                                 "/customers")
                         )
 						.uri("lb://customer-service") //Eureka aware uri
-                ).build();
+                )
+
+                //load-balanced custom filter.
+                .route("lb_customer_service_paths", c -> c.path("/cust/**")
+                        .filters(f -> f.rewritePath("/cust/(?<CID>.*)",
+                                "/customers/${CID}")
+                        )
+                        .uri("lb://customer-service")
+                )
+
+                //circuit breaker
+                .route("cb", cb -> cb.path("/cb")
+                        .filters(f -> {
+                            f.hystrix("/cb");
+                            f.rewritePath("/cb", "/delay");
+                            return f;
+                        })
+                        .uri("lb://customer-service")
+
+                )
+
+
+                .build();
 	}
 
 	public static void main(String[] args) {

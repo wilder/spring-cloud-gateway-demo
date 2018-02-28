@@ -36,7 +36,7 @@ public class CustomerServiceApplication {
     RouterFunction<?> routes(CustomerRepository cr) {
 	    return route(GET("/customers"), r -> ServerResponse.ok().body(cr.findAll(), Customer.class))
                 .andRoute(GET("/customers/{id}"), r -> ServerResponse.ok().body(cr.findById(r.pathVariable("id")), Customer.class))
-                .andRoute(GET("/delay"), r -> ServerResponse.ok().body(Flux.just("Hello, World!").delayElements(Duration.ofSeconds(1)), String.class));
+                .andRoute(GET("/delay"), r -> ServerResponse.ok().body(Flux.just("Hello, World!").delayElements(Duration.ofSeconds(10)), String.class));
     }
 
 	public static void main(String[] args) {
